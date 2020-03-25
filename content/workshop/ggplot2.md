@@ -22,7 +22,7 @@ selected = false
 url_pdf = "https://github.com/aosmith16/ggplot2-graphics-workshop/blob/master/graphics_with_ggplot2_workshop_handout.pdf"
 url_slides = ""
 url_video = ""
-url_code = "https://github.com/aosmith16/ggplot2-graphics-workshop/blob/master/graphics_with_ggplot2_script.r"
+url_code = "https://raw.githubusercontent.com/aosmith16/ggplot2-graphics-workshop/master/graphics_with_ggplot2_script.r"
 
 # Does the content use math formatting?
 math = true

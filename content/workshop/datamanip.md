@@ -22,7 +22,7 @@ selected = false
 url_pdf = "https://github.com/aosmith16/data-manipulation-workshop/blob/master/data_manipulation_workshop_handout.pdf"
 url_slides = ""
 url_video = ""
-url_code = "https://github.com/aosmith16/data-manipulation-workshop/blob/master/data_manipulation_workshop_script.r"
+url_code = "https://raw.githubusercontent.com/aosmith16/data-manipulation-workshop/master/data_manipulation_workshop_script.r"
 
 # Does the content use math formatting?
 math = true
