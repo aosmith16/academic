@@ -57,8 +57,8 @@ I provide an R script that we'll run code from during the workshop as well as  a
 
 ### Interactive tutorials
 
-In addition to the materials above, I have converted the workshop material into interactive tutorials that can be run in on your own computer.  To use this you will need to have package **learnr** installed (`install.packages("learnr")`).  
+In addition to the materials above, I have converted the workshop material into three interactive tutorials that can be run on your own computer.  To use this you will need to have package **learnr** installed (`install.packages("learnr")`).  
 
-Download a tutorial listed below and save it on your computer as an Rmd file.  Open this file with RStudio and click the `Run Document` button at the top to start the tutorial.
+Click on a tutorial listed below and save the file that opens up in your browser on your computer as a file ending in .Rmd using `Save as...`/`Save Page As...`.  Open the saved Rmd file with RStudio and click the `Run Document` button at the top to start the tutorial.
 
-<a href="https://raw.githubusercontent.com/aosmith16/data-manipulation-workshop/master/tutorials/part3_joining_two_datasets.Rmd" download="filename">Tutorial 3: Joins</a>
+<a target="_blank" href="https://raw.githubusercontent.com/aosmith16/data-manipulation-workshop/master/tutorials/part3_joining_two_datasets.Rmd" download>Tutorial 3: Joins</a>
