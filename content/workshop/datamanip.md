@@ -54,3 +54,11 @@ The workshop covers how to:
 Along the way students learn how to use the pipe operator to chain several data manipulation steps together. Students have time to practice data manipulation and reshaping using the `babynames` dataset from package **babynames**.
 
 I provide an R script that we'll run code from during the workshop as well as  a PDF document.  The PDF is a written version of the workshop, including code and output, to be used as a reference.
+
+### Interactive tutorials
+
+In addition to the materials above, I have converted the workshop material into interactive tutorials that can be run in on your own computer.  To use this you will need to have package **learnr** installed (`install.packages("learnr")`).  
+
+Download a tutorial listed below and save it on your computer as an Rmd file.  Open this file with RStudio and click the `Run Document` button at the top to start the tutorial.
+
+<a href="https://raw.githubusercontent.com/aosmith16/data-manipulation-workshop/master/tutorials/part3_joining_two_datasets.Rmd" download="filename">Tutorial 3: Joins</a>
