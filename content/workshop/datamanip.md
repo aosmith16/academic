@@ -55,7 +55,7 @@ Along the way students learn how to use the pipe operator to chain several data 
 
 I provide an R script that we'll run code from during the workshop as well as  a PDF document.  The PDF is a written version of the workshop, including code and output, to be used as a reference.
 
-### Interactive tutorials
+### [Interactive tutorials](#interactive-tutorials)
 
 In addition to the materials above, I have converted the workshop material into three interactive tutorials that can be run on your own computer.  To use this you will need to have package **learnr** installed (`install.packages("learnr")`).  
 
