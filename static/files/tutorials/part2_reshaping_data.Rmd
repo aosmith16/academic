@@ -286,4 +286,4 @@ numbaby_76_17 %>%
 
 ###
 
-That's the end of the reshaping tutorial.  The final tutorial in this series is about *joining* two datasets together.
+This is the end of the reshaping tutorial.  The final tutorial in this series is about *joining* two datasets together.

@@ -61,5 +61,6 @@ In addition to the materials above, I have converted the workshop material into 
 
 Click on a tutorial listed below and save the file as a .Rmd when the download window opens.  Open this saved Rmd file with RStudio and click the `Run Document` button at the top to start the tutorial.
 
+<a href="/files/tutorials/part1_data_manipulation_basics.Rmd" download="tutorial1_basics.Rmd">Tutorial 1: Data manipulation basics</a>  
 <a href="/files/tutorials/part2_reshaping_data.Rmd" download="tutorial2_reshape.Rmd">Tutorial 2: Reshaping</a>  
 <a href="/files/tutorials/part3_joining_two_datasets.Rmd" download="tutorial3_joins.Rmd">Tutorial 3: Joins</a>
