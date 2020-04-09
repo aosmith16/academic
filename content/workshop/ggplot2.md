@@ -53,3 +53,4 @@ In addition to the materials above, I have converted the workshop material into 
 Click on a tutorial listed below and save the file as a .Rmd when the download window opens.  Open this saved Rmd file with RStudio and click the `Run Document` button at the top to start the tutorial.
 
 <a href="/files/tutorials/part1_ggplot2_basics.Rmd" download="tutorial1_ggplot2_basics.Rmd">Tutorial 1: ggplot2 basics</a>  
+<a href="/files/tutorials/part2.1_polishing_raw_data.Rmd" download="tutorial2_ggplot2_appearance.Rmd">Tutorial 2: controlling plot appearance</a>  
