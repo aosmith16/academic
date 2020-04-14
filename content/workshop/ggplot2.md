@@ -54,3 +54,4 @@ Click on a tutorial listed below and save the file as a .Rmd when the download w
 
 <a href="/files/tutorials/part1_ggplot2_basics.Rmd" download="tutorial1_ggplot2_basics.Rmd">Tutorial 1: ggplot2 basics</a>  
 <a href="/files/tutorials/part2.1_polishing_raw_data.Rmd" download="tutorial2_ggplot2_appearance.Rmd">Tutorial 2: controlling plot appearance</a>  
+<a href="/files/tutorials/part2.2_polishing_results.Rmd" download="tutorial3_ggplot2_appearance_legend.Rmd">Tutorial 3: controlling plot appearance with a legend</a>  
