@@ -1,4 +1,4 @@
-# 2018-04-18
+# 2020-03
 
 # Data manipulation in R
 # This workshop focus on the basics of data manipulation
@@ -12,14 +12,16 @@
 # 	coding style better, but I find dplyr
 # 	approachable for folks with non-programming backgrounds
 
-# The workshop is more-or-less broken into 4 parts:
+# The workshop is more-or-less broken into 3 parts:
 # 1. Reviewing functions in dplyr for basic
 	# data manipulation/cleaning/munging
 # 2. An intro to *reshaping* datasets using functions
 	# from the tidyr package
 # 3. Merging datasets using dplyr functions
-# 4. Practice - time permitting you can
-	# practice some of your new skills
+
+
+# We have small practice exercises after
+    # parts 1 and 2
 
 
 # The common data manipulation tasks we will cover:
@@ -37,6 +39,8 @@
 	# (including dplyr and tidyr)
 	# I use is from stack overflow
 	# http://stackoverflow.com/questions/tagged/r
+    # but also see the RStudio community
+    # https://community.rstudio.com/
 # Both packages are relatively young and so
 	# there are still things that do/will change
 # However, the basic functions
@@ -50,7 +54,7 @@
 
 # The packages ----
 # The current versions of the packages we'll be working with are
-	# dplyr 0.7.4 and tidyr 0.8.0
+	# dplyr 0.8.3 and tidyr 1.0.2
 
 # check if your version is up to date using packageVersion()
 packageVersion("dplyr")
@@ -187,7 +191,11 @@ ungroup( summarise( byam.cyl, mdisp = mean(disp) ) )
 	# calculating the same summary statistics 
 	# for multiple variables at once
 
-# They are listed in the same help page,
+# These scoped functions will still be available 
+     # but will be superseded by `across()` in dplyr 1.0.0, 
+     # which will be released in 2020.
+
+# These functions are listed in the same help page,
 	# and each has slightly different arguments
 ?summarise_all
 
@@ -201,14 +209,14 @@ ungroup( summarise( byam.cyl, mdisp = mean(disp) ) )
 
 # Here is the mean of every variable for each cylinder group 
 	# (using the "bycyl" grouped dataset)
-summarise_all(bycyl, mean)
+summarise_all(bycyl, .funs = mean)
 
 # What would happen if we had a factor variable
 	# and tried to do this?
-# We'll make "vs" a factor so we can see
+# We'll make "vs" a factor so we can see the result
 bycyl$vs = factor(bycyl$vs)
 
-summarise_all(bycyl, mean)
+summarise_all(bycyl, .funs = mean)
 
 # summarise_at() ----
 
@@ -220,7 +228,7 @@ summarise_all(bycyl, mean)
 	# as the second argument within vars()
 	# prior to giving the summary function we want to use
 # Here we'll ge the mean of only disp and wt
-summarise_at(bycyl, vars(disp, wt), mean)
+summarise_at(bycyl, .vars = vars(disp, wt), .funs = mean)
 
 # Some of the variables in the dataset are 
 	# actually categorical
@@ -233,7 +241,7 @@ summarise_at(bycyl, vars(disp, wt), mean)
 	# function in a few minutes
 
 # Let's remove am and vs from the means summary table
-summarise_at(bycyl, vars(-am, -vs), mean)
+summarise_at(bycyl, .vars = vars(-am, -vs), .funs = mean)
 
 # summarise_if() ----
 # Another option for summarizing only some of the variables
@@ -243,21 +251,25 @@ summarise_at(bycyl, vars(-am, -vs), mean)
 # For example, we could summarize only the numeric columns
 	# by testing each function with the is.numeric() predicate function
 
-# The predicate function in summarise_if comes before 
+# The predicate function in summarise_if() comes before 
 	# listing the summary functions we want
-summarise_if(bycyl, is.numeric, mean)
+summarise_if(bycyl, .predicate = is.numeric, .funs = mean)
 # In the results, one the numeric variables are summarized,
 	# so "vs", which we made a factor, isn't included
 
 # With any of the summarise_* functions,
 	# we can calculate more than a single summary functions at once 
-	# by including all the functions inside funs()
-summarise_if( bycyl, is.numeric, funs(mean, max) )
+	# by including all the functions inside a list()
+summarise_if( bycyl, .predicate = is.numeric, 
+              .funs = list(mean, max) )
 
 # Notice that the names of the function are appended
-	# to the variable names
-# We can change what is appended within funs()
-summarise_if( bycyl, is.numeric, funs(mn = mean, mx = max) )
+	# with "fn1", "fn2"
+# This is a regression, and in the next version of dplyr
+    # the names of the functions will be appended
+# We can change what is appended within the list()
+summarise_if( bycyl, .predicate = is.numeric, 
+              .funs = list(mn = mean, mx = max) )
 
 
 # The glimpse() function alternative to printing to the console ----
@@ -265,11 +277,12 @@ summarise_if( bycyl, is.numeric, funs(mn = mean, mx = max) )
 	# instead of creating a new object and dplyr doesn't
 	# show all possible variables of wide datasets like this
 # To see all variable names we could use glimpse()
-glimpse( summarise_if( bycyl, is.numeric, funs(mean, max) ) )
+glimpse( summarise_if( bycyl, .predicate = is.numeric, 
+                       .funs = list(mn = mean, mx = max) ) )
 
 
 # More basic data manipulation ----
-	# with filter, select, mutate, and arrange
+	# with filter(), select(), mutate(), and arrange()
 
 # Let's now switch our focus now to talk about 
 	# some of the other functions we can use
@@ -360,7 +373,7 @@ select(mtcars, cyl, vs)
 # See the help page for select_helpers() for all of these special
 	# functions and how to use them
 # Everything we can do with select_helpers() in select()
-	# can also be done in summarise_at()
+	# can also be done in the, e.g., summarise_at() vars argument
 ?select_helpers
 
 # While I'm showing you some examples that aren't very meaningful,
@@ -597,7 +610,7 @@ mtcars %>%
 	group_by(cyl) %>% # group by number of cylinders
 	summarise( mratio = mean(hd.ratio) ) # calculate mean hd.ratio per cylinder category
 
-# We can assign a name to the final object, of course
+# We can assign a name to the final object, as well
 sum.ratio = mtcars %>%
 	filter(am == 0) %>% # filter out the manual transmission cars
 	mutate(hd.ratio = hp/disp) %>% # make new ratio variable
@@ -627,21 +640,18 @@ mtcars %>%
 	filter(wt <= 4) %>% 
 	t.test(hp ~ am, data = .)
 
+# The n() function for counting rows per group ----
 
-# A few more dplyr functions ----
-
-# We're going to quickly run through a few more functions
-	# that are useful when working on
-	# manipulating/cleaning a dataset
-
-# The n() function ----
+# Before we move on I want to talk about
+    # one more function
 
 # The dplyr function n() counts
 	# up the number of rows in a group
 # This is so useful when making tables of summary statistics
 mtcars %>%
     group_by(cyl) %>%
-    summarise( n = n() )
+    summarise( n = n(),
+               mdis = mean(disp) )
 
 # We can also use it directly in, e.g., filter() or mutate(),
     
@@ -658,7 +668,7 @@ mtcars %>%
     filter(n() < 10) %>%
     ungroup()
 
-# We can use it in mutate() if we need an index within each group
+# We can use n() in mutate() if we need an index within each group
 	# in the order of the dataset
 # We use select() below only so the we can see the new variable
 	# when printed to the console
@@ -666,7 +676,7 @@ mtcars %>%
 	group_by(cyl) %>%
 	select(1:3) %>%
 	mutate( index = 1:n() ) %>%
-    ungroup()
+     ungroup()
 
 # If we want to add the index based on some order,
 	# we could arrange the dataset first
@@ -676,57 +686,61 @@ mtcars %>%
 	group_by(cyl) %>%
 	select(1:3) %>%
 	mutate( index = 1:n() ) %>%
-    ungroup()
+     ungroup()
 
+# Practicing data manipulation ----
 
-# The n_distinct() function ----
+# To make sure we fit it in, we'll take a few minutes
+    # to practice some of the data manipulation functions
+    # we've covered so far
 
-# n_distinct() is a function related to n(),
-	# but counts up the number of *unique values* in a variable
-# This can be useful in exploring a dataset or checking for mistakes
+# Install package babynames ----
+# We'll be practicing using a dataset from the "babynames" package
+    # which is not currently installed in this room
+# We'll install it now by going to the "Packages" pane,
+    # hitting the "Install" button and installing "babynames"
+# Alternatively we could write install.packages("babynames")
 
-# For example, if we know we should only have 3 values
-	# for number of cylinders we could check to make sure	
-	# our dataset doesn't contain more than that
-	# (which would mean a typo)
-mtcars %>%
-	summarise( ncyl = n_distinct(cyl) )
+# The current version of this package
+    # is version 1.0.0
+packageVersion("babynames")
 
-# Or we could see how many unique mpg values in each cyl group
-	# compared to the total number of rows in each group
-mtcars %>%
-	group_by(cyl) %>%
-	summarise( n = n(), nmpg = n_distinct(mpg) )
+# Once babynames is installed, we'll load it and
+    # look at the help page for the "babynames" dataset
+library(babynames)
 
-# The distinct() function ----
-# This is the last function I'm going to talk about in this section
-# This is a function we can use when we have duplicated values
-	# on some rows for some variables
-	# but we only want to work with a dataset
-	# based on the unique values of that variable
+?babynames
 
-# For example, above we see we have less unique values
-	# of mpg per group than we have rows in each group
-# Maybe we aren't be interested in doing an analysis
-	# using duplicates so we can pull out just the "distinct" ones
+# This dataset has information on the number and proportion of
+# given baby names each year from 1880-2015 for each sex (male, female)
+# provided by the US Social Security Administration
+# Only names with at least 5 uses are included
 
-# We group the dataset to do this within cylinder groups
-mtcars %>%
-	group_by(cyl) %>%
-	distinct(mpg) %>%
-    ungroup()
+# There are five variables, shown below
+glimpse(babynames)
+head(babynames)
 
-# Notice we get 27 rows instead of the 32 original,
-     # which matches what we calculated via n_distinct()
+# Pratice problem 1 ----
+# Filtering and sorting
 
-# If we want to keep the rest of the variables in the dataset,
-	# we can use the ".keep_all" argument
+# What name was given to the largest number of babies 
+    # in the year you were born?
 
-mtcars %>%
-	group_by(cyl) %>%
-	distinct(mpg, .keep_all = TRUE) %>%
-    ungroup()
+# How many babies were given that name in 2017?
 
+# Practice problem 2 ----
+# Filtering, grouping, summarizing, n()
+
+# Calculate the total number of baby names 
+    # for each levels of the sex variable
+    # in the year you were born and in 2017.
+
+# Hint: To use filter() with multiple values 
+    # you'll need %in% instead of ==.  
+    # For example, if you wanted to filter 
+    # to years 1980 and 2015 you'd use 
+    # year %in% c(1980, 2015) 
+    # as the condition in `filter()`.
 
 # Part 2: Reshaping datasets ----
 
@@ -737,16 +751,13 @@ mtcars %>%
 	# and from long format to wide format.
 
 # We are going to be working the tidyr package
-	# Which uses a language involving "gathering" and "spreading"
-# The reshape2 package is the precursor to tidyr, 
-	# which you might find useful, as well, 
-	# but we won't cover it today
+	# Which uses a language involving "pivoting"
 
-# When we "gather" datasets, we change them from wide format to long format,
+# When we pivot datasets "long", we change them from wide format to long format,
 	# so we take information stored in multiple columns and     
      # gather it all together into a single long column
 
-# When we "spread" datasets, we change them from long format to wide format
+# When we pivot datasets "wide", we change them from long format to wide format
 	# so we take information stored in multiple rows of a single column
 	# and put it into multiple columns
 
@@ -754,13 +765,13 @@ mtcars %>%
 	# become clearer once we start practicing this
 
 # When I think of reasons to reshape datasets for work in R, 
-	# I think of gathering columns more often
-	# than spreading columns so we'll begin with that
+	# I think of going wide to long more often
+	# than going long to wide so we'll begin with that
 
 # We loaded tidyr at the beginning of the workshop
 	# so we should be ready to go
 
-# We're first going to create a "toy" dataset to work with
+# I'm going to create a "toy" dataset to work with
 # By "toy" I mean a small dataset that doesn't involve any "real" data
 # Being able to create toy datasets to try out functions is important,
 	# especially when your real dataset is very large and it will
@@ -769,115 +780,119 @@ mtcars %>%
 	# from the package or from base R like the way
 	# we used mtcars in the first part of this workshop
 
-# We're going to create a time series dataset,
-	# where "individuals" were measured for some response
-	# at multiple points in time
+# I'm going to make a "time series" dataset,
+	# where "individuals" were measured for some 
+     # continuous response at multiple points in time
 # We need a column for individuals, 
 	# a column for some treatment that was applied,
 	# and columns holding values of some response 
 		# collected at the different times
-# We're going to make a dataset with 6 rows
+# This dataset will only have 6 rows
 # Small datasets are good for practice!
 
-# Make 2 treatments, a and b
+# I'm skipping going through the steps, but here is the data
+# There are 6 individuals but they were given the
+     # same names within each of the 2 treatments
+# Not I didn't set a seed (see the help file for set.seed() ),
+     # so our datasets will all have slightly different numbers
 
-( trt = rep( c("a", "b"), each = 3) )
+( toy1 = data.frame(indiv = rep(1:3, times = 2),
+                    trt = rep( c("a", "b"), each = 3),
+                    time1 = rnorm(n = 6),
+                    time2 = rnorm(n = 6),
+                    time3 = rnorm(n = 6) ) )
 
-# Make 6 individuals, named 1 through 3 within each treatment
-	# (this is commonly how folks code nested groups, 
-	# although it can be preferable
-	# to have individuals with unique identifiers)
+# Take note that this dataset contains 18 values
+     # of quantiative info (6 rows, 3 columns of numbers)
 
-( indiv = rep(1:3, times = 2) )
-
-# Make values for the quantitative measurement
-	# taken at 3 different time periods for the 6 individuals
-	# by drawing from a normal(0,1) distribution 6 times
-# I didn't set the seed (see the help file for set.seed() ),
-	# so our datasets will all be slightly different
-
-time1 = rnorm(n = 6)
-time2 = rnorm(n = 6)
-time3 = rnorm(n = 6)
-
-# Put these five vectors into a data.frame
-
-( toy1 = data.frame(indiv, trt, time1, time2, time3) )
-
+# Wide to long ----
 # If we did an analysis in R for a dataset like this
 	# we wouldn't want the three time periods in different columns
 # Instead we want a single column that represents time of measurement
 	# and then a column with the quantitative measurements
 # In short, we want to take a "wide" dataset and make it "long"
 
-# We will do this using the function gather() on our data.frame
-# In "gather", the first thing we do after the data argument
-	# is to name the new columns we are making
-# The first name, key, will be the new grouping column based
-	# on the column names
-# The second name, value, is the new column of
-	# all the values that we are taking from multiple columns
-	# and putting into a single column
-# Then we simply list the columns that we want
-	# to put into a single column;
-	# in this case, our three "time" variables
+# We will "lengthen" the dataset
+     # using the function pivot_longer() on our data.frame
+# In pivot_longer(), the first thing we do defining the data 
+	# is to choose the columns we want to be combined
+     # We can use the select_helpers we used earlier for this
+# Then we set the name of the new grouping column based
+	# on the column names with "names_to"
+# Finally we set the name of new column of
+	# all the values with "values_to"
+# Both column names must be done using strings,
+     # meaning the variable name in quotes
 
-gather(toy1, key = time,
-       value = measurement,
-       time1, time2, time3)
+toy1 %>% 
+     pivot_longer(cols = time1:time3,
+                  names_to = "time",
+                  values_to = "measurement")
 
-# The tidyr package is made to be used with dplyr
-    # (hence the data argument is always first in tidyr functions)
-# This means we can use some of the same tricks
-# Rather than writing out all three column names,
-    # we can use some short cuts including minus signs
-    # and the select_helpers() functions
-
-# The following are all alternatives we could use
-	# for choosing which columns we wanted to gather together
-gather(toy1, key = time,
-       value = measurement,
-       time1:time3)
-
-gather(toy1, key = time,
-       value = measurement,
-       -indiv, -trt)
-
-gather(toy1, key = time,
-       value = measurement,
-       contains("time") )
+# This dataset has 18 rows and a single column of values
+     # and so still contains our original 18 pieces of info
 
 # We'd better name this object so we can use it for 
 	# additional reshaping practice
+# I use starts_with() this time in "cols"
 
-toy1long = gather(toy1, key = time,
-                  value = measurement,
-                  contains("time") )
+toy1long = toy1 %>% 
+     pivot_longer(cols = starts_with("time"),
+                  names_to = "time",
+                  values_to = "measurement")
 
-# Let's spread the measurement column of our long format dataset 
+# Long to wide ----
+
+# Let's take the measurement column of our long format dataset 
 	# back into the original format
-	# (i.e., put it back into the wide format)
+	# (i.e., "widen" it)
 # You might do this if you had a data set in long format
 	# that needed to be in a wide format 
 	# for use in a different software package
 
-# We will use the spread() function for this
-# In the spread() function, the first argument
-    # after the dataset is the "key" variable 
-# The "key" variable is the variable that contains the groups
-	# we want represented by separate columns
-	# The categories in this variable will be the new column names
-# The second argument is the name of the column
-	# that contains the values we will fill
-	# our new columns with (the "value" argument)
+# We will use the pivot_wider() function for this
+# After defining the dataset, we will use
+     # a pair of arguments to choose the
+     # column(s) that contain the variable that
+     # will be the new columns names ("names_from")
+     # and the column(s) that contain the values
+     # will will fill the new columns with ("values_from")
+# These are existing columns, so can be written using
+     # "bare" names (i.e., without quotes)
 
-spread(toy1long, key = time, value = measurement)
+toy1long %>%
+     pivot_wider(names_from = time,
+                 values_from = measurement)
 
-# Duplicate identifiers ----
+# Multiple columns in "names_from"
+
+# To take info from multiple columns for making
+     # a new, wider dataset, we can pass multiple
+     # names to "names_from"
+# The new column names are separated by an underscore
+     # by default and the names are affected
+     # by the order we list the variables
+
+toy1long %>%
+     pivot_wider(names_from = c(trt, time),
+                 values_from = measurement)
+
+# With 3 rows and 6 columns of values, 
+     # we still have our 18 original pieces of information
+
+# We can the separator with "names_sep"
+# We can change the names of the columns by changing
+     # the order we list them
+toy1long %>%
+     pivot_wider(names_from = c(time, trt),
+                 values_from = measurement,
+                 names_sep = ".")
+
+# Non-unique row identifiers ----
 # If the rows in your dataset aren't uniquely identified,
-	# you will get an error message
+	# you will get warning messages in pivot_wider()
 
-# For example, if we were trying to spread a dataset that
+# For example, if we were trying to widen a dataset that
 	# only had the "trt" column but not the "indiv" column,
 	# our rows wouldn't be uniquely identified
 
@@ -885,74 +900,74 @@ spread(toy1long, key = time, value = measurement)
 toy1long %>%
 	select(-indiv)
 
-# Look what happens if we try to spread this dataset
+# Look what happens if we try to widen this dataset
 toy1long %>%
-	select(-indiv) %>% 
-	spread(key = time, value = measurement)
+     select(-indiv) %>% 
+     pivot_wider(names_from = time, 
+                 values_from = measurement)
 
-# In my experience, getting this error message
-	# usually means it is time to step back
-	# and think about what I am trying to do and why
+# In particular take note of the warning messages
+# These give useful information about what is going on
 
-# It may be that we need to do some other data manipulation
-	# before spreading the dataset into a wide format
+# The output dataset looks odds because all three values
+     # for each trt and time were kept and put in a list
 
-# Let's see what that would look like
-# If we want to use the no "indiv" dataset, we possibly
-	# want to summarize the dataset so we have a single 
-	# row for each "trt" and "time" combination before
-	# putting it into a wide format
-# For example, we could average the measurements 
-	# within treatments for each time
+# It is likely we want to summarize over the multiple
+     # values, which we can do with the "values_fn" argument
+# One of the messages was indicating this
 
-# This involves grouping and then summarizing
+# I'll calculate the mean of the values 
+     # while widening into multiple columns
+
 toy1long %>%
-	select(-indiv) %>%
-	group_by(trt, time) %>%
-	summarise( measurement = mean(measurement) )
+     select(-indiv) %>% 
+     pivot_wider(names_from = time, 
+                 values_from = measurement,
+                 values_fn = list(measurement = mean) )
 
-# Now our rows are uniquely identified by trt and time,
-    # so we can use spread()
-# Notice I ungrouped prior to spreading so
-    # the result is no longer grouped
-toy1long %>%
-	select(-indiv) %>%
-	group_by(trt, time) %>%
-	summarise( measurement = mean(measurement) ) %>%
-    ungroup() %>%
-	spread(key = time, value = measurement)
+# Since we've summarized over some of the data,
+     # we now only have 6 pieces of info instead
+     # of the original 18
+
+# Practice problem 3 ----
+# Reshaping
+
+# Let's practice reshaping before going on
+    # to the last topic of the workshop
+
+# This will be based on the result of practice problem 2
+# I didn't name the final object I made, 
+    # so I'll remake it here with the name
+    # numbaby_76_17"
+# You should do the same with your final
+    # dataset from practice problem 2
+
+numbaby_76_17 = babynames %>%
+    filter( year %in% c(1976, 2017) ) %>%
+    group_by(year, sex) %>%
+    summarise(n = n() ) %>%
+    ungroup()
+
+numbaby_76_17
+
+# First, reshape the dataset from practice problem 2 
+    # to a wide format. 
+    # Make a dataset with a separate column 
+    # for each sex containing the 
+    # number of baby names in a given year.
 
 
-# Using unite() for tidying a dataset via tidyr ----
+# Then reshape the dataset from practice problem 2 
+    # to a different wide format. 
+    # Make a dataset with a separate column 
+    # for each year containing the 
+    # number of baby names in a given sex
 
-# There are other functions that might come up
-	# when reshaping via tidyr
-# We certainly can't cover them all here,
-	# but here is one more example
 
-# If we wanted to have the combination of
-	# two columns as the new variable names in "spread",
-	# you could use unite() as an intermediate step
-
-# In unite() we name the new column we are creating
-	# and then list the columns that contain
-	# the values we want to *unite* together
-toy1long %>%
-	unite(col = trt_time, trt, time)
-
-# By default the original columns are removed from the dataset 
-	# and the separator (via "sep" is an underscore)
-# Both these things can be changed; see the help page
-
-# Once the columns are united, we can spread()
-toy1long %>%
-	unite(col = trt_time, trt, time) %>%
-	spread(key = trt_time, value = measurement)
-
-# The complement of unite() is separate(),
-	# which comes in handy when you need to gather
-	# many columns of different types
-# We won't cover this function today
+# Finally, practice putting the datast 
+    # back in the original format.
+    # Take the dataset that has sex as separate columns 
+    # and put this back in the original format.  
 
 
 # Part 3: Joining datasets ----
@@ -969,10 +984,6 @@ toy1long %>%
 	# we can easily join these together
 
 # Let's make two toy datasets that reflect such a situation
-# This time I'll skip the step of making each variable
-	# a separate vector
-# This helps keeps our workspace from getting
-	# cluttered with temporary objects
 
 # The first dataset is the counts of some organism in 
 	# each plot within a site
@@ -987,15 +998,15 @@ set.seed(16) # If we set the seed, we will all get the same random numbers gener
 # This dataset is slightly unbalanced, as site 3
 	# doesn't have the "c" treatment count
 ( tojoin1 = data.frame(site = rep(1:3, each = 3, length.out = 8),
-			   treat = rep(c("a", "b", "c"), length.out = 8),
-			   count = rpois(8, 6) ) )
+                       treat = rep(c("a", "b", "c"), length.out = 8),
+                       count = rpois(8, 6) ) )
 
 # This dataset is also slightly unbalanced,
 	# missing the elevation measurement from
 	# site 3 treatment "a"
 ( tojoin2 = data.frame(site = rep(1:3, length.out = 8),
-			   treat = rep(c("b", "c", "a"), each = 3, length.out = 8),
-			   elev = rgamma(8, 1000, 1) ) )
+                       treat = rep(c("b", "c", "a"), each = 3, length.out = 8),
+                       elev = rgamma(8, 1000, 1) ) )
 
 
 # Using an inner join ----
@@ -1018,8 +1029,10 @@ set.seed(16) # If we set the seed, we will all get the same random numbers gener
 
 ( joined = inner_join(tojoin1, tojoin2) )
 
-# To have clearer/more readable code, we can write out the variable names
+# To have clearer/more readable code, 
+    # we can write out the variable names
 	# we want to join on using "by"
+    # This is whta I usually do
 inner_join( tojoin1, tojoin2, by = c("site", "treat") )
 
 
@@ -1042,6 +1055,9 @@ left_join( tojoin1, tojoin2, by = c("site", "treat") )
 # Now we have all rows from "tojoin1", 
 	# with NA filling in the missing value for "elev"
 
+# Note there is a right_join() function, 
+    # which we will not practice today,
+    # that works much like left_join()
 
 # Using a full join ----
 # To return all rows from both datasets regardless of
@@ -1052,9 +1068,6 @@ left_join( tojoin1, tojoin2, by = c("site", "treat") )
 	# returns NA for the one missing."
 
 full_join( tojoin1, tojoin2, by = c("site", "treat") )
-
-# There is also right_join(), which we will not practice today,
-	# that works much like left_join()
 
 
 # Matching multiple rows ----
@@ -1070,11 +1083,11 @@ full_join( tojoin1, tojoin2, by = c("site", "treat") )
 # Think about adding a variable that is measured
 	# at the site level to our abundance dataset
 ( tojoin3 = data.frame(site = 1:3,
-				 rainfall = rgamma(3, 10, 1) ) )
+                       rainfall = rgamma(3, 10, 1) ) )
 
 # Each treatment plot within a site should have
 	# the same amount of rainfall,
-	# which is what we get after joining
+	# which is what we get after joining by "site"
 left_join(tojoin1, tojoin3, by = "site")
 
 # However, this behavior can also lead to problems
@@ -1133,72 +1146,63 @@ tojoin1 %>%
 	anti_join( tojoin2, ., by = c("site", "treat") )
 
 
-# Part 4: Practicing these skills ----
+# Examples of a couple more dplyr functions ----
 
-# If we have time left in the workshop, now is your
-    # chance to practice some of what you saw
+# There are a couple of other functions that I 
+    # commonly use for exploring datasets that I
+    # want to show here
 
-# Install package babynames ----
-# We'll be practicing using a dataset from the "babynames" package
-    # which is not currently installed in this room
-# We'll install it now by going to the "Packages" pane,
-    # hitting the "Install" button, installing "babynames"
-# Alternatively we could write install.packages("babynames")
+# It is very likely we will not get to these 
+    # during the workshop, so you might run
+    # through these examples on your own
 
-# Once babynames is installed, we'll load it and
-    # look at the help page for the "babynames" dataset
-library(babynames)
+# The n_distinct() function ----
 
-?babynames
+# n_distinct() is a function related to n(),
+    # but counts up the number of *unique values* in a variable
+# This can be useful in exploring a dataset or checking for mistakes
 
-# This dataset has information on the number and proportion of
-    # given baby names each year from 1880-2015 for each sex (male, female)
-    # provided by the US Social Security Administration
-    # Only names with at least 5 uses are included
+# For example, if we know we should only have 3 values
+    # for number of cylinders we could check to make sure	
+    # our dataset doesn't contain more than that
+    # (which would mean a typo)
+mtcars %>%
+    summarise( ncyl = n_distinct(cyl) )
 
-# There are five variables, shown below
-glimpse(babynames)
-head(babynames)
+# Or we could see how many unique mpg values in each cyl group
+    # compared to the total number of rows in each group
+mtcars %>%
+    group_by(cyl) %>%
+    summarise( nmpg = n_distinct(mpg),
+               n = n() )
 
-# Pratice 1 ----
-    # Filtering and sorting
+# The distinct() function ----
 
-# In the year you were born, 
-    # which name was the most popular for each sex?
+# This is a function we can use when we have duplicated values
+    # on some rows for some variables
+    # but we only want to work with a dataset
+    # based on the unique values of that variable
 
-# In that year, what were the top ten names by proportion?
+# For example, above we see we have less unique values
+    # of mpg per group than we have rows in each group
+    # Maybe we aren't be interested in doing an analysis
+    # using duplicates so we can pull out just the "distinct" ones
 
-# Hint: you might be interested in the function top_n(), 
-    # which we didn't look at today
+# We group the dataset to do this within cylinder groups
+mtcars %>%
+    group_by(cyl) %>%
+    distinct(mpg) %>%
+    ungroup()
 
-# Practice 2 ----
-    # Filtering, grouping, mutating
+# Notice we get 27 rows instead of the 32 original,
+    # which matches what we calculated via n_distinct()
 
-# Choose a name to work with, possibly your own if your name
-    # is relatively common in English or Spanish
-    # (As far as I could tell, most names in this dataset
-        # were an English or Spanish version of a name)
-# Ask me if you can't think of a name
+# If we want to keep the rest of the variables in the dataset,
+    # we can use the ".keep_all" argument
 
-# What was the rank of your chosen name in 2015?
-
-# What was the rank of your chosen name for each year from 2010 to 2015?
-
-# Hint: to filter to everything in a vector 
-    # we use %in% instead of ==
-    # e.g., for filtering to years 1976 through 1978 we'd use
-        # year %in% 1976:1978
-
-# Practice 3 ----
-    # Filtering, selecting, spreading
-
-# Get the proportion of babies with your chosen name for
-    # each year from 2010 to 2015.
-
-# Convert the dataset from long format into a wide format, 
-    # with years in columns instead of rows
-
-# Hint: To get the wide format dataset in a single row,
-    # extraneous continous variables need to be removed
+mtcars %>%
+    group_by(cyl) %>%
+    distinct(mpg, .keep_all = TRUE) %>%
+    ungroup()
 
 # end workshop

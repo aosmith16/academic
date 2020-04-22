@@ -1,4 +1,4 @@
-# 2017-10-18
+# 2020-04
 
 # Today we will be learning some of the basics in how to
 	# work with the R software
@@ -21,16 +21,12 @@
 # We will be revisiting R help many times today
 ?mean
 
-# If you don't know the function name, you can search for topics
-	# with "??keyword", which will search R help and
-	# return pages that contain that key word
-??merging
-
 # In terms of searching online, the site "Stack Overflow"
 	# is currently very active on R programming questions
 # You can search the R tagged questions on Stack Overflow,
 	# https://stackoverflow.com/questions/tagged/r
-
+# Also see the RStudio Community site,
+     # https://community.rstudio.com/
 
 ### Before we start running code, ----
 	# let's talk about the working directory
@@ -142,7 +138,7 @@ str(temperature)
 
 # Uh-oh, there's a pretty obvious problem that jumps out at me
 # The "DryWt" column should be numeric, but instead it has
-	# been read as a *factor*
+	# been read as a *factor* (*character* in R 4.0.0)
 # A factor in R is a categorical or classification variable
 
 # Let's take a closer look at just this column
@@ -175,7 +171,7 @@ temperature$DryWt
 
 # So let's read in the dataset again, this time
 	# using the "na.strings" argument to tell R that "." means NA
-temperature = read.table("temp.txt", header = TRUE, na.strings = c(".", "NA") )
+temperature = read.table("temp.txt", header = TRUE, na.strings = "." )
 
 ### The basics of exploring a dataset in R ----
 
@@ -228,10 +224,12 @@ ncol(temperature)
 
 # We're still in the data exploration stage so
 	# let's get a quick summary of all variables in this object using summary()
+# This is most useful for numeric variables and least
+     # for character variables
 summary(temperature)
 
 # We can also get a summary of a single column
-summary(temperature$Tech)
+summary(temperature$Temp)
 
 ### Reading in the respiration datasets ----
 # The datasets containing the respiration information
@@ -382,7 +380,8 @@ names(respfall)
 	# what if you just want to change one of the names?
 
 # We can use brackets to *extract* only the 4th column name
-?"["  # Yep, brackets are actually a function, meaning "extract"
+# Yep, brackets are actually a function, meaning "extract"
+     # see ?"[" to get to the documentation
 
 names(respfall)[4]  # pull the 4th column name only
 names(respfall)[4] = "season" # replace the 4th name
@@ -397,6 +396,41 @@ summary(respall)
 # But if you check your Environment pane, you'll see
 	# they have a different number of rows - the temperature dataset
 	# is missing information from one of the Sample plots
+
+### Find missing "Sample" number ----
+
+# Which "Sample" is missing in the temperature dataset?
+# Let's check
+
+# We could order the datasets by Sample and
+     # then look through until we find a missing value
+# This is the way we might do it in Excel if we didn't have any better tools
+
+# I prefer to let R do the work for me
+# We could use the very useful "%in%" (see "match", as well),
+     # but the function anti_join() from the
+     # add-on package dplyr makes this even easier
+
+# We'll need to load the package into R, either through
+     # clicking the checkbox in the RStudio packages pane
+     # or using the library() function
+# If you have not installed this package on your computer you'd need to
+     # do so before you can load it
+library(dplyr)
+
+# Reading through the help page for anti_join(), we see that
+     # this function returns all rows from the first dataset (the x dataset)
+     # that are NOT in the second dataset (the y dataset)
+?anti_join
+
+# Let's see which "Sample" is in the respall dataset
+# that is missing in the temperature dataset
+
+# We use the by argument to tell R which variables to match on (more on this below)
+# We put respall as the "x" dataset and temperature is the "y" dataset
+anti_join(respall, temperature, by = "Sample")
+
+# It is sample 21 that is missing from the temperature dataset
 
 # Merge the temperature and respiration datasets ----
 
@@ -626,30 +660,11 @@ write.csv(x = resptemp, file = "combined_resp_and_temp_data.csv", row.names = FA
 
 # An analysis always start with data exploration,
 	# usually with some sort of data summaries and graphics
+# Here we'll just focus on graphical data exploration
 
 # We are going to compare the means of respiration
 	# between the two temperature groups
 	# so let's look more closely at those groups
-
-# Get a summary of respiration values by temperature group (hot or cold)
-	# Using the "subset" function and "testing for equality", ==
-?subset
-
-subset(resptemp, tempgroup == "Cold")
-
-# We can also just take a subset of a data.frame of only
-	# a few of the columns by adding the select argument
-subset(resptemp, tempgroup == "Cold", select = c("Resp", "tempgroup") )
-
-# We can nest functions rather than making new named objects
-	# if we want if we don't need the objects for later
-# Let's do this while getting a summary of respiration
-	# for each temperature group
-summary( subset(resptemp, tempgroup == "Cold",
-			 select = "Resp") )
-
-summary( subset(resptemp, tempgroup == "Hot",
-			 select = "Resp") )
 
 # Exploratory graphics ----
 
@@ -679,14 +694,18 @@ qplot(x = tempgroup, y = Resp, data = resptemp)
 # If we don't want that NA value, we could
 	# remove any missing values in tempgroup with is.na() and not (!)
 # This means we only want the values of tempgroup that are NOT NA
-qplot(x = tempgroup, y = Resp, data = subset(resptemp, !is.na(tempgroup) ) )
+     # with the subset(0 function
+qplot(x = tempgroup, y = Resp, 
+      data = subset(resptemp, !is.na(tempgroup) ) )
 
 # How about a boxplot?
 # We can do this with qplot(), as well, by adding the "geom" argument
-qplot(x = tempgroup, y = Resp, data = resptemp, geom = "boxplot")
+qplot(x = tempgroup, y = Resp, 
+      data = resptemp, geom = "boxplot")
 
 # Here is the plot without the missing values
-qplot(x = tempgroup, y = Resp, data = subset(resptemp, !is.na(tempgroup) ),
+qplot(x = tempgroup, y = Resp, 
+      data = subset(resptemp, !is.na(tempgroup) ),
 	 geom = "boxplot")
 
 # Maybe it's time to remove that NA point and make a new object
@@ -700,8 +719,10 @@ resptemp2 = subset(resptemp, !is.na(tempgroup) )
 
 # This means adding a layer (literally, with the plus sign)
 	# to qplot()  - in this case, stat_summary
-qplot(x = tempgroup, y = Resp, data = resptemp2, geom = "boxplot") +
-	stat_summary(fun.y = mean, geom = "point", color = "red", size = 3)
+qplot(x = tempgroup, y = Resp, 
+      data = resptemp2, geom = "boxplot") +
+	stat_summary(fun.y = mean, geom = "point", 
+	             color = "red", size = 3)
 
 
 # Histograms can be used

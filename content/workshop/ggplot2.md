@@ -19,10 +19,10 @@ selected = false
 # projects = ["deep-learning"]
 
 # Links (optional).
-url_pdf = "https://github.com/aosmith16/ggplot2-graphics-workshop/blob/master/graphics_with_ggplot2_workshop_handout.pdf"
+url_pdf = "https://github.com/aosmith16/ggplot2-graphics-workshop/raw/master/graphics_with_ggplot2_workshop_handout.pdf"
 url_slides = ""
 url_video = ""
-url_code = "https://raw.githubusercontent.com/aosmith16/ggplot2-graphics-workshop/master/graphics_with_ggplot2_script.r"
+url_code = "files/ggplot2/graphics_with_ggplot2_script.r"
 
 # Does the content use math formatting?
 math = true
@@ -44,7 +44,7 @@ The first half of the workshop focuses on learning the syntax and terminology us
 
 In the second half of the workshop we focus on controlling the overall appearance of a graphic when making “publication-ready” plots.  We'll go through the code to create two fairly complicated graphics, building each one layer by layer so students can see how the plot changes with each addition.  Students will also see some data manipulation to *reshape* a dataset prior to plotting, which is often necessary when plotting data with **ggplot2**.   
 
-I provide an R script that we'll run code from during the workshop as well as a PDF document.  The PDF is a written version of the workshop, including code and output, to be used as a reference.
+I provide an R script that we'll run code from during the workshop as well as a PDF document.  The PDF is a written version of the workshop, including code and output, to be used as a reference.  Make sure you save the R script as a file ending in `.R` and not as a text document.  You may need to set it to "All Files" and manually add `.R` when saving.
 
 ### Interactive tutorials
 
@@ -55,3 +55,5 @@ Click on a tutorial listed below and save the file as a .Rmd when the download w
 <a href="/files/tutorials/part1_ggplot2_basics.Rmd" download="tutorial1_ggplot2_basics.Rmd">Tutorial 1: ggplot2 basics</a>  
 <a href="/files/tutorials/part2.1_polishing_raw_data.Rmd" download="tutorial2_ggplot2_appearance.Rmd">Tutorial 2: controlling plot appearance</a>  
 <a href="/files/tutorials/part2.2_polishing_results.Rmd" download="tutorial3_ggplot2_appearance_legend.Rmd">Tutorial 3: controlling plot appearance with a legend</a>  
+
+*This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.*

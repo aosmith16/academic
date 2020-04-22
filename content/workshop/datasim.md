@@ -41,3 +41,5 @@ caption = ""
 Knowing how to simulate data in R has been incredibly useful to me in my day-to-day work. Simulating data is useful not only for exploring the long-run behavior of a statistic but also allows you to make small datasets for working out hard data manipulation tasks or for testing your intuition about a mathematical relationship or statistical model. But how does a person get started with simulations?
 
 In this talk I go over some of the functions R has available to help with simulating data. I discuss functions for random number generation and replicating elements of a vector. I go in depth on how to use these functions and then show how to create some small datasets with the tools I present.  The last topic is about repeating the data generation process many times.
+
+*This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.*

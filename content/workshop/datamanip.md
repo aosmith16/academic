@@ -19,10 +19,10 @@ selected = false
 # projects = ["deep-learning"]
 
 # Links (optional).
-url_pdf = "https://github.com/aosmith16/data-manipulation-workshop/blob/master/data_manipulation_workshop_handout.pdf"
+url_pdf = "https://github.com/aosmith16/data-manipulation-workshop/raw/master/data_manipulation_workshop_handout.pdf"
 url_slides = ""
 url_video = ""
-url_code = "https://raw.githubusercontent.com/aosmith16/data-manipulation-workshop/master/data_manipulation_workshop_script.r"
+url_code = "files/datamanip/data_manipulation_workshop_script.r"
 
 # Does the content use math formatting?
 math = true
@@ -53,7 +53,7 @@ The workshop covers how to:
 
 Along the way students learn how to use the pipe operator to chain several data manipulation steps together. Students have time to practice data manipulation and reshaping using the `babynames` dataset from package **babynames**.
 
-I provide an R script that we'll run code from during the workshop as well as  a PDF document.  The PDF is a written version of the workshop, including code and output, to be used as a reference.
+I provide an R script that we'll run code from during the workshop as well as  a PDF document.  The PDF is a written version of the workshop, including code and output, to be used as a reference.  Make sure you save the R script as a file ending in `.R` and not as a text document.  You may need to set it to "All Files" and manually add `.R` when saving.
 
 ### Interactive tutorials
 
@@ -64,3 +64,6 @@ Click on a tutorial listed below and save the file as a .Rmd when the download w
 <a href="/files/tutorials/part1_data_manipulation_basics.Rmd" download="tutorial1_basics.Rmd">Tutorial 1: Data manipulation basics</a>  
 <a href="/files/tutorials/part2_reshaping_data.Rmd" download="tutorial2_reshape.Rmd">Tutorial 2: Reshaping</a>  
 <a href="/files/tutorials/part3_joining_two_datasets.Rmd" download="tutorial3_joins.Rmd">Tutorial 3: Joins</a>
+
+
+*This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.*
