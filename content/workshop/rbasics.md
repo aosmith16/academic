@@ -61,16 +61,18 @@ Learn about factors in R and how R deals with missing values.  This tutorial als
 - **Tutorial 4: Graphical data exploration and analysis**  
 The last tutorial introduces some basic graphical data exploration using **ggplot2** prior to analysis and, finally, the two-sample analysis.
 
-You have the option to do the first two tutorials online via your browser.  
+You have the option to do the first three tutorials online via your browser.  
 
 <a href="https://aosmith.shinyapps.io/part1_rbasics_getting_started/">Tutorial 1: Getting started with R/RStudio</a>  
-<a href="https://aosmith.shinyapps.io/part2_rbasics_reading_data/">Tutorial 2: Reading data into R</a>
+<a href="https://aosmith.shinyapps.io/part2_rbasics_reading_data/">Tutorial 2: Reading data into R</a>  
+<a href="https://aosmith.shinyapps.io/part3_rbasics_factors_missing_values/">Tutorial 3: Working with factors and missing values</a>  
 
 If you already know a little bit about using R via RStudio, all four tutorials can be run on your own computer.  To do this you will need to have package **learnr** installed (`install.packages("learnr")`). 
 
-Click on a tutorial listed below and save the file as a .Rmd when the download window opens.  Make sure you save it in the same folder as you saved the three workshop datasets.  Open this saved Rmd file with RStudio and click the `Run Document` button at the top to start the tutorial.
+Click on a tutorial listed below and save the file as a .Rmd when the download window opens.  Open this saved Rmd file with RStudio and click the `Run Document` button at the top to start the tutorial.
 
 <a href="/files/tutorials/part1_getting_started.Rmd" download="tutorial1_rbasics_getting_started.Rmd">Tutorial 1: Getting started with R/RStudio</a>  
 <a href="/files/tutorials/part2_reading_data.Rmd" download="tutorial2_rbasics_reading_data.Rmd">Tutorial 2: Reading data into R</a>  
+<a href="/files/tutorials/part3_factors_and_missing_values.Rmd" download="tutorial2_rbasics_factors_missing_values.Rmd">Tutorial 3: Working with factors and missing values</a>  
 
 *This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.*
