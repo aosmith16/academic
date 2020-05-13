@@ -73,6 +73,7 @@ Click on a tutorial listed below and save the file as a .Rmd when the download w
 
 <a href="/files/tutorials/part1_getting_started.Rmd" download="tutorial1_rbasics_getting_started.Rmd">Tutorial 1: Getting started with R/RStudio</a>  
 <a href="/files/tutorials/part2_reading_data.Rmd" download="tutorial2_rbasics_reading_data.Rmd">Tutorial 2: Reading data into R</a>  
-<a href="/files/tutorials/part3_factors_and_missing_values.Rmd" download="tutorial2_rbasics_factors_missing_values.Rmd">Tutorial 3: Working with factors and missing values</a>  
+<a href="/files/tutorials/part3_factors_and_missing_values.Rmd" download="tutorial3_rbasics_factors_missing_values.Rmd">Tutorial 3: Working with factors and missing values</a>  
+<a href="/files/tutorials/part4_plots_and_analysis.Rmd" download="tutorial4_rbasics_plots_and_analysis.Rmd">Tutorial 4: Exploratory plots and analysis</a>  
 
 *This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.*
