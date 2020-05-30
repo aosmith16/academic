@@ -62,7 +62,7 @@ enableGitInfo = false
   organizations = [ { name = "College of Forestry, Oregon State University", url = "http://www.forestry.oregonstate.edu/" } ]
 
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
-  avatar = "ao_ppg.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
+  avatar = "ao_pic.png"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
   email = "ariel.muldoon@gmail.com"
   address = ""
   office_hours = ""
