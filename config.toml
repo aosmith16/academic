@@ -23,7 +23,7 @@ paginate = 10
 disqusShortname = ""
 
 # Enable analytics by entering your Google Analytics tracking ID
-googleAnalytics = ""
+googleAnalytics = "UA-168583844-2"
 
 # Default language to use (if you setup multilingual support)
 defaultContentLanguage = "en"
@@ -62,7 +62,7 @@ enableGitInfo = false
   organizations = [ { name = "College of Forestry, Oregon State University", url = "http://www.forestry.oregonstate.edu/" } ]
 
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
-  avatar = "ao_pic.png"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
+  avatar = "ao_pic2.png"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
   email = "ariel.muldoon@gmail.com"
   address = ""
   office_hours = ""
