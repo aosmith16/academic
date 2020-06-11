@@ -42,4 +42,10 @@ Knowing how to simulate data in R has been incredibly useful to me in my day-to-
 
 In this talk I go over some of the functions R has available to help with simulating data. I discuss functions for random number generation and replicating elements of a vector. I go in depth on how to use these functions and then show how to create some small datasets with the tools I present.  The last topic is about repeating the data generation process many times.
 
+### Interactive tutorial
+
+In addition to the materials above, I have converted the workshop material into an interactive tutorial.  This goes through the same information as in the PDF but allows you to work through it interactively in your web browser.
+
+<a href="https://aosmith.shinyapps.io/tutorial_simulation_helper_functions/">Tutorial: Getting started simulating data in R</a>  
+
 *This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.*
