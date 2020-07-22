@@ -75,6 +75,10 @@ enableGitInfo = false
   # Enable Keybase in Contact widget by entering your keybase.io username.
   keybase = ""
 
+  # Add google tag manager param per https://martijnvanvreeden.nl/how-to-add-google-tag-manager-to-hugo-static-website/
+  gtm_id = "GTM-MS2LVGZ"
+  # gtm_ga = TRUE
+
   # Discussion link (e.g. link to a forum, mailing list, or chat).
   #   Uncomment line below to use.
   #   discussion = { name = "Discuss", url = "https://discourse.gohugo.io" }
