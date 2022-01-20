@@ -2,7 +2,7 @@
 # About/Biography widget.
 widget = "about"
 active = true
-date = 2016-04-20T00:00:00
+date = 2022-01-19T00:00:00
 
 # Order that this section will appear in.
 weight = 5
@@ -35,4 +35,4 @@ weight = 5
 
 # About Me
 
-I am currently the research consulting statistician for the statistical consulting program in the College of Forestry at Oregon State University.  I advise faculty and students in the college on, e.g., appropriate study designs to answer research questions, statistical approaches to their analyses, how to convey statistical results, and how to use software to perform analyses. I write about statistics and R topics at [Very Statisticious](https://aosmith.rbind.io/).
+I am currently working as an applied statistician at Boeing, working with engineers to answer questions and solve problems. My expertise is in designing studies to answer research questions, statistical approaches for analysis, and clearly conveying statistical results to domain experts. I have a blog about statistics and R topics at [Very Statisticious](https://aosmith.rbind.io/), which is presently on hiatus since starting my new role.
